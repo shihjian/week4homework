@@ -2,9 +2,14 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+// 引入swaggerUI
+const swaggerUI = require("swagger-ui-express");
+const swaggerFile = require("./swagger-output");
+
 // 吵架必備
 const cors = require("cors");
 const mongoose = require("mongoose");
+
 // Router
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -28,4 +33,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/posts", postsRouter);
+// 引入swagger 路由
+app.use('/api-doc',swaggerUI.serve,swaggerUI.setup(swaggerFile))
 module.exports = app;

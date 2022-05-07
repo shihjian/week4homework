@@ -1,0 +1,240 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Node.js 直播班",
+    "description": "紀錄直播班所使用到的API"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "apiKeyAuth": {
+      "type": "apiKey",
+      "in": "headers",
+      "name": "authorization",
+      "description": "請加上APU TOKEN"
+    }
+  },
+  "consumes": [],
+  "produces": [],
+  "paths": {
+    "/posts/": {
+      "get": {
+        "tags": [
+          "文章CRUD"
+        ],
+        "description": "取得全部文章",
+        "parameters": [
+          {
+            "name": "timeSort",
+            "in": "query"
+          },
+          {
+            "name": "q",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Some thing",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "6275ce90f854a19e3f9ca31b"
+                      },
+                      "content": {
+                        "type": "string",
+                        "example": "測試資料3"
+                      },
+                      "image": {
+                        "type": "string",
+                        "example": ""
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "6271d053e4d791780cac19b1"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "John"
+                          },
+                          "photo": {
+                            "type": "string",
+                            "example": "https://thumb.fakeface.rest/thumb_male_10_8c02e4e9bdc0e103530691acfca605f18caf1766.jpg"
+                          }
+                        }
+                      },
+                      "likes": {
+                        "type": "number",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "文章CRUD"
+        ],
+        "description": "新增文章",
+        "parameters": [
+          {
+            "name": "timeSort",
+            "in": "query"
+          },
+          {
+            "name": "q",
+            "in": "query"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "格式",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "string",
+                  "example": "Number"
+                },
+                "content": {
+                  "type": "string",
+                  "example": "String"
+                },
+                "image": {
+                  "type": "string",
+                  "example": "String"
+                }
+              },
+              "required": [
+                "user",
+                "content"
+              ]
+            },
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "文章CRUD"
+        ],
+        "description": "刪除全部文章",
+        "parameters": [
+          {
+            "name": "timeSort",
+            "in": "query"
+          },
+          {
+            "name": "q",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "delete": {
+        "tags": [
+          "文章CRUD"
+        ],
+        "description": "刪除單一文章",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "timeSort",
+            "in": "query"
+          },
+          {
+            "name": "q",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "文章CRUD"
+        ],
+        "description": "更新文章",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "timeSort",
+            "in": "query"
+          },
+          {
+            "name": "q",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {}
+}
