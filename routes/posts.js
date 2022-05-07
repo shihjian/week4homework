@@ -7,9 +7,16 @@ const POST = require("../models/postsModel");
 const USER = require("../models/userModel");
 // GET
 router.get("/", async function (req, res) {
-  const post = await POST.find().populate({
-    path:'user'  // 選擇欄位
-  });
+  // 新舊排序
+  const timeSort = req.query.timeSort === "asc" ? "createdAt" : "-createdAt";
+  // 關鍵字搜尋
+  const q = req.query.q !== undefined ? { content: new RegExp(req.query.q) } : {};
+  const post = await POST.find(q)
+    .populate({
+      path: "user", // 選擇欄位
+      select: "name photo ",
+    })
+    .sort(timeSort);
   res.status(200).json({
     status: "success",
     data: post,
