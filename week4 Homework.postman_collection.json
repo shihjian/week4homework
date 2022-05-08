@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "54934219-a587-4649-9c9b-6b7cabec36d1",
+		"name": "week4 Homework",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "取得資料",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://secure-temple-98193.herokuapp.com/posts?=",
+					"protocol": "https",
+					"host": [
+						"secure-temple-98193",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "新增資料",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\":\"6271d12ce4d791780cac19b2\",\r\n    \"content\":\"天氣晴\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://secure-temple-98193.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"secure-temple-98193",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "修改資料",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\":\"哈囉你們好\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://secure-temple-98193.herokuapp.com/posts/62771dc437a8be149c7611ee",
+					"protocol": "https",
+					"host": [
+						"secure-temple-98193",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts",
+						"62771dc437a8be149c7611ee"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "62771dc437a8be149c7611ee",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除單筆資料",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://floating-sea-43244.herokuapp.com/posts/",
+					"protocol": "https",
+					"host": [
+						"floating-sea-43244",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "全部刪除",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://floating-sea-43244.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"floating-sea-43244",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

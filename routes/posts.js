@@ -137,7 +137,7 @@ router.patch("/:id", async function (req, res) {
     const id = req.params.id;
     const data = req.body;
 
-    //接到的req.body 整包送給serve，就不用$set了
+
     const upData = await POST.findByIdAndUpdate(id, data);
     if (upData !== null) {
       const data = await POST.findById(id);
