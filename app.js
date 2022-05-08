@@ -47,7 +47,7 @@ app.use("/posts", postsRouter);
 app.use(function (req, res, next) {
   res.status(404).json({
     statue: "false",
-    message: "無此路由",
+    message: "無此路由!",
   });
 });
 
