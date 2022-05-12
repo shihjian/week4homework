@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const { generateToken, isAuth } = require("../service/auth");
 const errHandler = require("../errorHandler/errHandler");
 // 不使用try cath方式
 const handleErrorAsync = require("../errorHandler/handleErrorAsync");

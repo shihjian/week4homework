@@ -18,7 +18,7 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
     return next(appError(401, "請先登入會員", next));
   }
 
-  // 驗證token正確性
+  // 驗證token正確性及拿取Id
   const decode = await new Promise((resolve, reject) => {
     // 解析token
     jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
@@ -26,6 +26,7 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
         reject(err);
       } else {
         resolve(payload);
+        console.log("payload",payload)
       }
     });
   });
