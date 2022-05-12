@@ -1,10 +1,14 @@
 var express = require("express");
 var router = express.Router();
 const errHandler = require("../errorHandler/errHandler");
-
+// 不使用try cath方式
+const handleErrorAsync = require("../errorHandler/handleErrorAsync");
+// 集中管理錯誤資訊
+const appError = require("../errorHandler/appError");
 // 引入Model
 const POST = require("../models/postsModel");
 const USER = require("../models/userModel");
+
 // GET
 router.get("/", async function (req, res) {
   /**
@@ -30,6 +34,7 @@ router.get("/", async function (req, res) {
         }
     }
    */
+
   // 新舊排序
   const timeSort = req.query.timeSort === "asc" ? "createdAt" : "-createdAt";
   // 關鍵字搜尋
@@ -48,8 +53,10 @@ router.get("/", async function (req, res) {
 });
 
 // POST
-router.post("/", async function (req, res) {
-  /**
+router.post(
+  "/",
+  handleErrorAsync(async function (req, res, next) {
+    /**
    *  #swagger.tags = ['文章CRUD']
    *  #swagger.description ='新增文章'
    *  #swagger.parameters['body'] = {
@@ -62,81 +69,70 @@ router.post("/", async function (req, res) {
           }
       }
    */
-  try {
-    const data = req.body;
-    console.log(data);
-    if (data.content !== "" && data.name !== "") {
-      const newPost = await POST.create(data);
-      res.status(200).json({
-        status: "success",
-        data: newPost,
-      });
-    } else {
-      errHandler(res, 400, 2001);
+
+    //自訂可預測錯誤
+    if (req.body.content == undefined) {
+      return next(appError(400, "你沒有填寫 content", next));
     }
-  } catch (err) {
-    res.status(400).json({
-      status: "false",
-      message: err.message,
+
+    const newPost = await POST.create(req.body);
+    res.status(200).json({
+      status: "success",
+      post: newPost,
     });
-  }
-});
+  })
+);
 
 // 單一 Delete
-router.delete("/:id", async function (req, res) {
-  /**
-   *  #swagger.tags = ['文章CRUD']
-   * #swagger.description ='刪除單一文章'
-   */
-  try {
+router.delete(
+  "/:id",
+  handleErrorAsync(async function (req, res) {
+    /**
+     *  #swagger.tags = ['文章CRUD']
+     * #swagger.description ='刪除單一文章'
+     */
+
     const id = req.params.id;
     const checkId = await POST.findByIdAndDelete(id);
-    if (checkId !== null) {
+    if (checkId) {
       res.status(200).json({
         status: "success",
         Message: "刪除成功",
       });
     } else {
-      errHandler(res, 400, 2002);
+      appError(400, "查無此ID", next);
     }
-  } catch (err) {
-    res.status(400).json({
-      status: "false",
-      message: err.message,
-    });
-  }
-});
+  })
+);
 
 // 全刪除
-router.delete("/", async function (req, res) {
-  /**
-   *  #swagger.tags = ['文章CRUD']
-   *  #swagger.description ='刪除全部文章'
-   */
-  try {
+router.delete(
+  "/",
+  handleErrorAsync(async function (req, res) {
+    /**
+     *  #swagger.tags = ['文章CRUD']
+     *  #swagger.description ='刪除全部文章'
+     */
+
     await POST.deleteMany({});
     res.status(200).json({
       status: "success",
       Message: "刪除成功",
     });
-  } catch (err) {
-    res.status(400).json({
-      status: "false",
-      message: err.message,
-    });
-  }
-});
+  })
+);
 
 // PATCH
-router.patch("/:id", async function (req, res) {
-  /**
-   *  #swagger.tags = ['文章CRUD']
-   * #swagger.description ='更新文章'
-   */
-  try {
+router.patch(
+  "/:id",
+  handleErrorAsync(async function (req, res) {
+    /**
+     *  #swagger.tags = ['文章CRUD']
+     * #swagger.description ='更新文章'
+     */
+
     const id = req.params.id;
     const data = req.body;
-
 
     const upData = await POST.findByIdAndUpdate(id, data);
     if (upData !== null) {
@@ -149,12 +145,7 @@ router.patch("/:id", async function (req, res) {
     } else {
       errHandler(res, 400, 2003);
     }
-  } catch (err) {
-    res.status(400).json({
-      status: "false",
-      message: err.message,
-    });
-  }
-});
+  })
+);
 
 module.exports = router;
