@@ -27,6 +27,7 @@ var app = express();
 
 // 資料庫設定開始
 
+dotenv.config({ path: "./config.env" });
 mongoose
   .connect(
     "mongodb+srv://werty713025:ab852456@cluster0.h2smg.mongodb.net/week4?retryWrites=true&w=majority"
@@ -82,7 +83,6 @@ const resErrorDev = (err, res) => {
 
 // Express 捕捉錯誤 (全部Error都會集中在這處理)
 app.use(function (err, req, res, next) {
-
   // dev，將statusCode複寫我自定義的
   err.statusCode = err.statusCode || 500;
   if (process.env.NODE_ENV === "dev") {

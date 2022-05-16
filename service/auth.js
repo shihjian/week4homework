@@ -26,7 +26,7 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
         reject(err);
       } else {
         resolve(payload);
-        console.log("payload",payload)
+        console.log("payload", payload);
       }
     });
   });
@@ -42,9 +42,10 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
 // 製作Token
 const generateToken = (user, statusCode, res) => {
   // user 為比對後的整包資料放到這
-  const token = jwt.sign({ id: req._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPRISE_DAY,
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_DAY,
   });
+  // 故意不給前端看到密碼
   user.password = undefined;
   res.status(statusCode).json({
     status: "Success",
