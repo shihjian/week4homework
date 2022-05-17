@@ -72,10 +72,20 @@ router.post(
    */
 
     //自訂可預測錯誤
-    if (req.body.content == undefined) {
-      return next(appError(400, "你沒有填寫 content", next));
+    if (!req.body.content) {
+      return next(appError(400, "你沒有填寫內容", next));
     }
-
+    if (!req.body.user) {
+      return next(appError(400, "你沒有填寫使用者", next));
+    }
+    const checkUser = await USER.findById(req.body.user)
+      .exec()
+      .catch((err) => {
+        null;
+      });
+    if (checkUser === null) {
+      return next(appError(400, "沒有這個使用者", next));
+    }
     const newPost = await POST.create(req.body);
     res.status(200).json({
       status: "success",
@@ -87,7 +97,7 @@ router.post(
 // 單一 Delete
 router.delete(
   "/:id",
-  handleErrorAsync(async function (req, res) {
+  handleErrorAsync(async function (req, res, next) {
     /**
      *  #swagger.tags = ['文章CRUD']
      * #swagger.description ='刪除單一文章'
@@ -95,7 +105,7 @@ router.delete(
 
     const id = req.params.id;
     const checkId = await POST.findByIdAndDelete(id);
-    if (checkId) {
+    if (checkId !== null) {
       res.status(200).json({
         status: "success",
         Message: "刪除成功",
@@ -114,7 +124,6 @@ router.delete(
      *  #swagger.tags = ['文章CRUD']
      *  #swagger.description ='刪除全部文章'
      */
-
     await POST.deleteMany({});
     res.status(200).json({
       status: "success",
@@ -126,7 +135,7 @@ router.delete(
 // PATCH
 router.patch(
   "/:id",
-  handleErrorAsync(async function (req, res) {
+  handleErrorAsync(async function (req, res, next) {
     /**
      *  #swagger.tags = ['文章CRUD']
      * #swagger.description ='更新文章'
@@ -144,7 +153,7 @@ router.patch(
         data: data,
       });
     } else {
-      errHandler(res, 400, 2003);
+      appError(400, "查無此ID編輯失敗", next);
     }
   })
 );
