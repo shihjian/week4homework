@@ -35,12 +35,12 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
   const currentUser = await User.findById(decode.id);
 
   // req 可以自定義
-  req.use = currentUser;
+  req.user = currentUser;
   next();
 });
 
 // 製作Token
-const generateToken = (user, statusCode, res) => {
+const generateToken = (user, statusCode,msg, res) => {
   // user 為比對後的整包資料放到這
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_DAY,
@@ -49,8 +49,9 @@ const generateToken = (user, statusCode, res) => {
   user.password = undefined;
   res.status(statusCode).json({
     status: "Success",
-    token,
+    msg:msg,
     name: user.name,
+    token,
   });
 };
 
