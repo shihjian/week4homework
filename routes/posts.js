@@ -1,6 +1,5 @@
 var express = require("express");
 var router = express.Router();
-const { generateToken, isAuth } = require("../service/auth");
 const errHandler = require("../errorHandler/errHandler");
 // 不使用try cath方式
 const handleErrorAsync = require("../errorHandler/handleErrorAsync");
@@ -9,10 +8,13 @@ const appError = require("../errorHandler/appError");
 // 引入Model
 const POST = require("../models/postsModel");
 const USER = require("../models/userModel");
-
+// token 機制
+const { isAuth, generateToken } = require("../service/auth");
 // GET
-router.get("/", async function (req, res) {
-  /**
+router.get(
+  "/",
+  handleErrorAsync(async function (req, res) {
+    /**
    *  #swagger.tags = ['文章CRUD']
    *  #swagger.description ='取得全部文章'
    *  #swagger.responses[200]={
@@ -36,26 +38,37 @@ router.get("/", async function (req, res) {
     }
    */
 
-  // 新舊排序
-  const timeSort = req.query.timeSort === "asc" ? "createdAt" : "-createdAt";
-  // 關鍵字搜尋
-  const q =
-    req.query.q !== undefined ? { content: new RegExp(req.query.q) } : {};
-  const post = await POST.find(q)
-    .populate({
-      path: "user", // 選擇欄位
-      select: "name photo ",
-    })
-    .sort(timeSort);
-  res.status(200).json({
-    status: "success",
-    data: post,
-  });
-});
+    let {
+      query: { q, sort, page, limit = 10 },
+    } = req;
 
-// POST
+    // 新舊排序
+    sort === "asc" ? "createdAt" : "-createdAt";
+    // // 關鍵字搜尋
+    const filter = q !== undefined ? { content: new RegExp(req.query.q) } : {};
+    const total = await POST.find(filter).count();
+    // console.log("total", total);
+    const totalPage = Math.ceil(total / limit);
+    // console.log("totalPage", totalPage);
+    const post = await POST.find(filter)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate({
+        path: "user", // 選擇欄位
+        select: "name photo ",
+      })
+      .sort(sort);
+    res.status(200).json({
+      status: "success",
+      data: post,
+    });
+  })
+);
+
+// 需要登入後的貼文
 router.post(
   "/",
+  isAuth,
   handleErrorAsync(async function (req, res, next) {
     /**
    *  #swagger.tags = ['文章CRUD']
@@ -70,23 +83,21 @@ router.post(
           }
       }
    */
-
-    //自訂可預測錯誤
     if (!req.body.content) {
       return next(appError(400, "你沒有填寫內容", next));
     }
-    if (!req.body.user) {
-      return next(appError(400, "你沒有填寫使用者", next));
+    if (!req.user.id) {
+      return next(appError(400, "請先登入會員", next));
     }
-    const checkUser = await USER.findById(req.body.user)
-      .exec()
-      .catch((err) => {
-        null;
-      });
-    if (checkUser === null) {
+    const checkUser = await USER.findById(req.user.id).exec();
+    console.log("checkUser", checkUser);
+    if (!checkUser) {
       return next(appError(400, "沒有這個使用者", next));
     }
-    const newPost = await POST.create(req.body);
+    const newPost = await POST.create({
+      content: req.body.content,
+      user: req.user.id,
+    });
     res.status(200).json({
       status: "success",
       post: newPost,
