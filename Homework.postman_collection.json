@@ -11,7 +11,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://secure-temple-98193.herokuapp.com/posts?=",
+					"raw": "https://secure-temple-98193.herokuapp.com/posts",
 					"protocol": "https",
 					"host": [
 						"secure-temple-98193",
@@ -23,8 +23,9 @@
 					],
 					"query": [
 						{
-							"key": "",
-							"value": ""
+							"key": "page",
+							"value": "1",
+							"disabled": true
 						}
 					]
 				}
@@ -34,11 +35,21 @@
 		{
 			"name": "新增資料",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyODYzNmQwMDMwM2UxZDNkMzFjY2RkNCIsImlhdCI6MTY1Mjk2Mzc4MywiZXhwIjoxNjUzNTY4NTgzfQ.aa0t3zd6k3obItV_18Tb1JTQMyvZVBq_DZrGF3eJK6U",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"user\":\"6271d12ce4d791780cac19b2\",\r\n    \"content\":\"天氣晴\"\r\n}",
+					"raw": "{\r\n    \"content\":\"天氣晴\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -132,6 +143,177 @@
 					],
 					"path": [
 						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "註冊",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"wertyh@gmail.com\",\r\n    \"password\":\"ab852456\",\r\n    \"confirmPassword\":\"ab852456\",\r\n    \"name\":\"王美\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://secure-temple-98193.herokuapp.com/users/sign_up",
+					"protocol": "https",
+					"host": [
+						"secure-temple-98193",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"sign_up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "登入",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"wertyh@gmail.com\",\r\n    \"password\":\"ab852456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://secure-temple-98193.herokuapp.com/users/sign_in",
+					"protocol": "https",
+					"host": [
+						"secure-temple-98193",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"sign_in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "變更密碼",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyODYzNmQwMDMwM2UxZDNkMzFjY2RkNCIsImlhdCI6MTY1Mjk2Mzc4MywiZXhwIjoxNjUzNTY4NTgzfQ.aa0t3zd6k3obItV_18Tb1JTQMyvZVBq_DZrGF3eJK6U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\":\"ab852456\",\r\n    \"confirmPassword\":\"ab852456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://secure-temple-98193.herokuapp.com/users/updatePassword",
+					"protocol": "https",
+					"host": [
+						"secure-temple-98193",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"updatePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "取得個人資訊",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyODYzNmQwMDMwM2UxZDNkMzFjY2RkNCIsImlhdCI6MTY1Mjk2Mzc4MywiZXhwIjoxNjUzNTY4NTgzfQ.aa0t3zd6k3obItV_18Tb1JTQMyvZVBq_DZrGF3eJK6U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://secure-temple-98193.herokuapp.com/users/profile",
+					"protocol": "https",
+					"host": [
+						"secure-temple-98193",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "修改個人資訊",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyODYzNmQwMDMwM2UxZDNkMzFjY2RkNCIsImlhdCI6MTY1Mjk2Mzc4MywiZXhwIjoxNjUzNTY4NTgzfQ.aa0t3zd6k3obItV_18Tb1JTQMyvZVBq_DZrGF3eJK6U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"王美美2\",\r\n    \"sex\":\"\",\r\n    \"photo\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://secure-temple-98193.herokuapp.com/users/profile",
+					"protocol": "https",
+					"host": [
+						"secure-temple-98193",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"profile"
 					]
 				}
 			},
