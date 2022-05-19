@@ -36,6 +36,12 @@ router.post(
       return next(appError("400", "Email格式不正確", next));
     }
 
+    // 確認email 是否重複
+    const cheekEmail = await USER.findOne({ email });
+    if (cheekEmail) {
+      return next(appError("400", "Email重複註冊", next));
+    }
+
     // 密碼加密需要一些時間 所以一定要用await
     password = await bcryptjs.hash(password, 12);
     const createNewUser = await USER.create({
@@ -80,7 +86,7 @@ router.post(
     if (password !== confirmPassword) {
       return next(appError(400, "新密碼和確認密碼不一致", next));
     }
-    if ((!validator.isLength(password, { min: 8 }))) {
+    if (!validator.isLength(password, { min: 8 })) {
       return next(appError(400, "密碼不得小於8碼", next));
     }
     password = await bcryptjs.hash(password, 12);
