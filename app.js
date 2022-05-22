@@ -15,6 +15,7 @@ const mongoose = require("mongoose");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var postsRouter = require("./routes/posts");
+var uploadRouter = require("./routes/upload");
 
 // 捕捉程式錯誤
 process.on("uncaughtException", (err) => {
@@ -44,6 +45,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/posts", postsRouter);
+app.use("/upload", uploadRouter);
 
 console.log(process.env.NODE_ENV);
 
