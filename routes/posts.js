@@ -151,15 +151,23 @@ router.patch(
      */
 
     const id = req.params.id;
-    const data = req.body;
+    const data = req.body.content;
 
-    const upData = await POST.findByIdAndUpdate(id, data);
+    if (!data) {
+      return next(appError(400, "請輸入訊息", next));
+    }
+    const upData = await POST.findByIdAndUpdate(
+      id,
+      {
+        content: data,
+      },
+      { new: true }
+    );
     if (upData !== null) {
-      const data = await POST.findById(id);
       res.status(200).json({
         status: "success",
         Message: "編輯成功",
-        data: data,
+        data: upData,
       });
     } else {
       appError(400, "查無此ID編輯失敗", next);
