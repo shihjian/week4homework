@@ -39,25 +39,23 @@ router.get(
    */
 
     let {
-      query: { q, sort, page, limit = 10 },
+      query: { q, sort },
     } = req;
 
     // 新舊排序
-    sort === "asc" ? "createdAt" : "-createdAt";
+    let rink = sort === "asc" ? "createdAt" : "-createdAt";
     // // 關鍵字搜尋
     const filter = q !== undefined ? { content: new RegExp(req.query.q) } : {};
     const total = await POST.find(filter).count();
     // console.log("total", total);
-    const totalPage = Math.ceil(total / limit);
+    // const totalPage = Math.ceil(total / limit);
     // console.log("totalPage", totalPage);
     const post = await POST.find(filter)
-      .skip((page - 1) * limit)
-      .limit(limit)
       .populate({
         path: "user", // 選擇欄位
         select: "name photo ",
       })
-      .sort(sort);
+      .sort(rink);
     res.status(200).json({
       status: "success",
       data: post,
