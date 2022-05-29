@@ -16,13 +16,15 @@ const postSchema = new mongoose.Schema(
     },
     user: {
       type: mongoose.Schema.ObjectId,
-      ref:"user", //連接到哪個Collection
-      required: [true, '貼文ID未填寫']
+      ref: "user", //連接到哪個Collection
+      required: [true, "貼文ID未填寫"],
     },
-    likes: {
-      type: Number,
-      default: 0,
-    },
+    likes: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "user",
+      },
+    ],
   },
   {
     versionKey: false,

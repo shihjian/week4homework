@@ -10,6 +10,7 @@ const POST = require("../models/postsModel");
 const USER = require("../models/userModel");
 // token 機制
 const { isAuth, generateToken } = require("../service/auth");
+const Post = require("../models/postsModel");
 // GET
 router.get(
   "/",
@@ -81,6 +82,7 @@ router.post(
           }
       }
    */
+    console.log("req.body.content", req.body.content);
     if (!req.body.content) {
       return next(appError(400, "你沒有填寫內容", next));
     }
@@ -175,4 +177,53 @@ router.patch(
   })
 );
 
+// 點擊按讚
+router.post(
+  "/:id/like",
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const _id = req.params.id;
+    const checkId = await Post.findById(_id);
+    if (!checkId) {
+      return next(appError("400", "查無此文章", next));
+    }
+    await Post.findByIdAndUpdate(
+      { _id },
+      {
+        $addToSet: {
+          likes: req.user.id,
+        },
+      }
+    );
+    res.status(201).json({
+      status: "success",
+      postId: _id,
+      userId: req.user.id,
+    });
+  })
+);
+
+// 取消按讚
+router.delete(
+  "/:id/like",
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const _id = req.params.id;
+    const checkId = await Post.findById(_id);
+    if (!checkId) {
+      return next(appError("400", "查無此文章", next));
+    }
+    await Post.findByIdAndUpdate(
+      { _id },
+      {
+        $pull: { likes: req.user.id },
+      }
+    );
+    res.status(201).json({
+      status: "success",
+      postId: _id,
+      userId: req.user.id,
+    });
+  })
+);
 module.exports = router;
