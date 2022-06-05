@@ -8,6 +8,7 @@ const appError = require("../errorHandler/appError");
 // 引入Model
 const POST = require("../models/postsModel");
 const USER = require("../models/userModel");
+const Comment = require("../models/commentsModel");
 // token 機制
 const { isAuth, generateToken } = require("../service/auth");
 const Post = require("../models/postsModel");
@@ -55,6 +56,10 @@ router.get(
       .populate({
         path: "user", // 選擇欄位
         select: "name photo ",
+      })
+      .populate({
+        path: "comments",
+        select: "comment user",
       })
       .sort(rink);
     res.status(200).json({
@@ -223,6 +228,28 @@ router.delete(
       status: "success",
       postId: _id,
       userId: req.user.id,
+    });
+  })
+);
+
+// 留言
+router.post(
+  "/:id/comment",
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const user = req.user.id;
+    const post = req.params.id;
+    const { comment } = req.body;
+    const newComment = await Comment.create({
+      post,
+      user,
+      comment,
+    });
+    res.status(201).json({
+      status: "success",
+      data: {
+        comments: newComment,
+      },
     });
   })
 );
