@@ -51,6 +51,7 @@ const generateToken = (user, statusCode,msg, res) => {
     status: "Success",
     msg:msg,
     name: user.name,
+    photo:user.photo,
     token,
   });
 };
