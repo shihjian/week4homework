@@ -59,7 +59,7 @@ router.get(
       })
       .populate({
         path: "comments",
-        select: "comment user",
+        select: "comment user createdAt",
       })
       .sort(rink);
     res.status(200).json({
