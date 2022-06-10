@@ -38,6 +38,8 @@ postSchema.virtual("comments", {
   // 找尋Comment的collection中的post欄位有無相同ID的貼文
   ref: "Comment",
   foreignField: "post",
+  // 從postModel的ID去尋找CommentModel中post欄位相同的ID
+  // _id 為Mongoose預設的ID
   localField: "_id",
 });
 const Post = mongoose.model("Post", postSchema);

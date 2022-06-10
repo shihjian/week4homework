@@ -129,4 +129,76 @@ router.patch(
     });
   })
 );
+
+// 追蹤
+router.post(
+  "/:id/follow",
+  isAuth,
+  handleErrorAsync(async function (req, res, next) {
+    if (req.params.id == req.user.id) {
+      return next(appError(400, "無法追蹤自己", next));
+    }
+
+    // 新增我的追蹤
+    await USER.updateOne(
+      {
+        _id: req.user.id,
+        "following.user": { $ne: req.params.id },
+      },
+      {
+        $addToSet: { following: { user: req.params.id } },
+      }
+    );
+    // 新增他的追蹤
+    await USER.updateOne(
+      {
+        _id: req.user.id,
+        "followers.user": { $ne: req.params.id },
+      },
+      {
+        $addToSet: { followers: { user: req.params.id } },
+      }
+    );
+    res.status(200).json({
+      status: "Success",
+      msg: "追蹤成功",
+    });
+  })
+);
+
+// 取消追蹤
+router.delete(
+  "/:id/unfollow",
+  isAuth,
+  handleErrorAsync(async function (req, res, next) {
+    if (req.params.id == req.user.id) {
+      return next(appError(400, "無法追蹤自己", next));
+    }
+
+    // 新增我的追蹤
+    await User.updateOne(
+      {
+        _id: req.user.id,
+        "following.user": { $ne: req.params.id },
+      },
+      {
+        $pull: { following: { user: req.params.id } },
+      }
+    );
+    // 新增他的追蹤
+    await User.updateOne(
+      {
+        _id: req.user.id,
+        "followers.user": { $ne: req.params.id },
+      },
+      {
+        $pull: { followers: { user: req.params.id } },
+      }
+    );
+    res.status(200).json({
+      status: "Success",
+      msg: "取消追蹤成功",
+    });
+  })
+);
 module.exports = router;

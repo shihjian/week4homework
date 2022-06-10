@@ -28,6 +28,24 @@ const userSchema = new mongoose.Schema(
       default: new Date(),
       select: false,
     },
+    followers: [
+      {
+        user: { type: mongoose.Schema.ObjectId, ref: "user" },
+        createdAt: {
+          type: Date,
+          Default: Date.now,
+        },
+      },
+    ],
+    following: [
+      {
+        user: { type: mongoose.Schema.ObjectId, ref: "User" },
+        createdAt: {
+          type: Date,
+          Default: Date.now,
+        },
+      },
+    ],
     photo: String,
   },
   {
