@@ -32,7 +32,7 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-// 偷掛comments陣列 虛擬document上去
+// 偷掛comments陣列 虛擬document上去。
 postSchema.virtual("comments", {
   // 找尋Comment的collection中的post欄位有無相同ID的貼文
   ref: "Comment",
