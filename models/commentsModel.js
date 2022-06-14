@@ -6,7 +6,7 @@ const commentSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: new Date,
+    default: Date.now,
   },
   user: {
     type: mongoose.Schema.ObjectId,
