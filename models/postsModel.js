@@ -5,7 +5,6 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: [true, "Content 未填寫"],
     },
-    image: String,
     createdAt: {
       type: Date,
       default: Date.now,
@@ -22,6 +21,7 @@ const postSchema = new mongoose.Schema(
         ref: "user",
       },
     ],
+    image: String,
   },
   {
     versionKey: false,

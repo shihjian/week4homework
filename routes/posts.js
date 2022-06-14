@@ -101,6 +101,7 @@ router.post(
     }
     const newPost = await POST.create({
       content: req.body.content,
+      image: req.body.image,
       user: req.user.id,
     });
     res.status(200).json({
