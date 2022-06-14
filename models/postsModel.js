@@ -5,9 +5,7 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: [true, "Content 未填寫"],
     },
-    image: {
-      type: String,
-    },
+    image: String,
     createdAt: {
       type: Date,
       default: Date.now,
