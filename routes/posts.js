@@ -92,7 +92,7 @@ router.post(
       return next(appError(400, "你沒有填寫內容", next));
     }
     if (!req.user.id) {
-      return next(appError(400, "請先登入會員", next));
+      return next(appError(400, "請先登入會員!", next));
     }
     const checkUser = await USER.findById(req.user.id).exec();
     console.log("checkUser", checkUser);
