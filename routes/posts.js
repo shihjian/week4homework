@@ -12,6 +12,7 @@ const Comment = require("../models/commentsModel");
 // token 機制
 const { isAuth, generateToken } = require("../service/auth");
 const Post = require("../models/postsModel");
+
 // GET
 router.get(
   "/",
@@ -251,6 +252,33 @@ router.post(
       data: {
         comments: newComment,
       },
+    });
+  })
+);
+
+// 取得個人所有聊天列表
+router.get(
+  "/user/:id",
+  handleErrorAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const checkId = await USER.findOne({ _id: id });
+    console.log(checkId);
+    if (!checkId) {
+      return next(appError(400, "沒有這個使用者", next));
+    }
+    const posts = await POST.find({ id })
+      .populate({
+        path: "user", // 選擇欄位
+        select: "name photo ",
+      })
+      .populate({
+        path: "comments",
+        select: "comment user createdAt",
+      })
+      .sort();
+    res.status(200).json({
+      status: "success",
+      data: posts,
     });
   })
 );
