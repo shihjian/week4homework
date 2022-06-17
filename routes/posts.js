@@ -261,16 +261,7 @@ router.get(
   "/user/:id",
   handleErrorAsync(async (req, res, next) => {
     const id = req.params.id;
-    const checkId = await USER.findOne({ _id: id });
-    console.log(checkId);
-    if (!checkId) {
-      return next(appError(400, "沒有這個使用者", next));
-    }
-    const posts = await POST.find({ id })
-      .populate({
-        path: "user", // 選擇欄位
-        select: "name photo ",
-      })
+    const posts = await POST.find({ user: id })
       .populate({
         path: "comments",
         select: "comment user createdAt",
