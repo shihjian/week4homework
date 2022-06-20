@@ -263,6 +263,10 @@ router.get(
     const id = req.params.id;
     const posts = await POST.find({ user: id })
       .populate({
+        path: "user", // 選擇欄位
+        select: "name photo ",
+      })
+      .populate({
         path: "comments",
         select: "comment user createdAt",
       })
