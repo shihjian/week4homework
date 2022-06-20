@@ -111,6 +111,19 @@ router.get(
   })
 );
 
+// 取得個人資訊
+router.get(
+  "/profiles/:id",
+  handleErrorAsync(async function (req, res, next) {
+    const id = req.params.id;
+    const user = await USER.find({ _id: id });
+    res.status(200).json({
+      status: "Success",
+      msg: user,
+    });
+  })
+);
+
 // 更新個人資訊
 router.patch(
   "/profile",
