@@ -131,11 +131,15 @@ router.patch(
   isAuth,
   handleErrorAsync(async function (req, res, next) {
     const { name, sex, photo } = req.body;
-    const user = await USER.findByIdAndUpdate(req.user._id, {
-      name,
-      sex,
-      photo,
-    });
+    const user = await USER.findByIdAndUpdate(
+      req.user._id,
+      {
+        name,
+        sex,
+        photo,
+      },
+      { new: true }
+    );
     res.status(200).json({
       status: "Success",
       msg: "資料更新成功",
@@ -157,6 +161,23 @@ router.get(
       status: "Success",
       msg: "資料更新成功",
       data: likes,
+    });
+  })
+);
+
+// 取得個人追蹤
+router.get(
+  "/following",
+  isAuth,
+  handleErrorAsync(async function (req, res, next) {
+    const following = await USER.find({ _id: req.user._id }).populate({
+      path: "following", // 選擇欄位
+      select: "name photo ",
+    });
+    res.status(200).json({
+      status: "Success",
+      msg: "資料更新成功",
+      data: following,
     });
   })
 );
@@ -207,7 +228,7 @@ router.delete(
     }
 
     // 新增我的追蹤
-    await User.updateOne(
+    await USER.updateOne(
       {
         _id: req.user.id,
         "following.user": { $ne: req.params.id },
@@ -217,7 +238,7 @@ router.delete(
       }
     );
     // 新增他的追蹤
-    await User.updateOne(
+    await USER.updateOne(
       {
         _id: req.user.id,
         "followers.user": { $ne: req.params.id },
