@@ -270,7 +270,7 @@ router.get(
         path: "comments",
         select: "comment user createdAt",
       })
-      .sort();
+      .sort("-createdAt");
     res.status(200).json({
       status: "success",
       data: posts,
