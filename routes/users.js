@@ -2,6 +2,7 @@ var express = require("express");
 var validator = require("validator");
 var bcryptjs = require("bcryptjs");
 var router = express.Router();
+const POST = require("../models/postsModel");
 const USER = require("../models/userModel");
 // 不使用try cath方式
 const handleErrorAsync = require("../errorHandler/handleErrorAsync");
@@ -139,6 +140,23 @@ router.patch(
       status: "Success",
       msg: "資料更新成功",
       edit: user,
+    });
+  })
+);
+
+// 取得個人按讚列表
+router.get(
+  "/getLikeList",
+  isAuth,
+  handleErrorAsync(async function (req, res, next) {
+    const likes = await POST.find({ likes: req.user._id }).populate({
+      path: "user", // 選擇欄位
+      select: "name photo ",
+    });
+    res.status(200).json({
+      status: "Success",
+      msg: "資料更新成功",
+      data: likes,
     });
   })
 );
