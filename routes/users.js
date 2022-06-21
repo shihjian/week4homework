@@ -171,7 +171,7 @@ router.get(
   isAuth,
   handleErrorAsync(async function (req, res, next) {
     const following = await USER.find({ _id: req.user._id }).populate({
-      path: "following", // 選擇欄位
+      path: "following.user", // 選擇欄位
       select: "name photo ",
     });
     res.status(200).json({
@@ -204,11 +204,11 @@ router.post(
     // 新增他的追蹤
     await USER.updateOne(
       {
-        _id: req.user.id,
-        "followers.user": { $ne: req.params.id },
+        _id: req.params.id,
+        "followers.user": { $ne: req.user.id },
       },
       {
-        $addToSet: { followers: { user: req.params.id } },
+        $addToSet: { followers: { user: req.user.id } },
       }
     );
     res.status(200).json({
@@ -224,14 +224,13 @@ router.delete(
   isAuth,
   handleErrorAsync(async function (req, res, next) {
     if (req.params.id == req.user.id) {
-      return next(appError(400, "無法追蹤自己", next));
+      return next(appError(400, "無法刪除自己", next));
     }
 
     // 新增我的追蹤
     await USER.updateOne(
       {
         _id: req.user.id,
-        "following.user": { $ne: req.params.id },
       },
       {
         $pull: { following: { user: req.params.id } },
@@ -240,11 +239,10 @@ router.delete(
     // 新增他的追蹤
     await USER.updateOne(
       {
-        _id: req.user.id,
-        "followers.user": { $ne: req.params.id },
+        _id: req.params.id,
       },
       {
-        $pull: { followers: { user: req.params.id } },
+        $pull: { followers: { user: req.user.id } },
       }
     );
     res.status(200).json({

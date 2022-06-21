@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
     ],
     following: [
       {
-        user: { type: mongoose.Schema.ObjectId, ref: "User" },
+        user: { type: mongoose.Schema.ObjectId, ref: "user" },
         createdAt: {
           type: Date,
           Default: Date.now,
